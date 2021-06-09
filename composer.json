@@ -1,5 +1,6 @@
 {
 	"name": "tarosky/taro-iframe-block",
+	"description": "WordPress plguin fro simple iframe block.",
 	"minimum-stability": "stable",
 	"license": "GPL-3.0-or-later",
 	"scripts": {

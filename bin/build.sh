@@ -34,6 +34,7 @@ rm -rf .stylelintrc.json
 rm -rf .wp-env.json
 rm -rf bin
 rm -rf node_modules
+rm -rf vendor
 rm -rf README.md
 rm -rf tests
 rm -rf phpcs.ruleset.xml
