@@ -47,8 +47,20 @@ jobs:
       - name: Install WordPress
         run: bash bin/install-wp-tests.sh wordpress root root 127.0.0.1:3306 ${{ matrix.wp }}
 
-      - name: Run test suite
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - name: Install NPM Packages
+        run: npm install
+
+      - name: Check PHP syntax
         run: composer test
+
+      - name: Check JS & CSS syntax
+        run: npm run lint
+
 
   pre_release:
     name: Create Release
