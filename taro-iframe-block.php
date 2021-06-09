@@ -18,12 +18,12 @@ defined( 'ABSPATH' ) or die();
  * Register assets
  */
 function taro_iframe_block_assets() {
-	$data = get_file_data( __FILE__, [
+	$data    = get_file_data( __FILE__, [
 		'version' => 'Version',
 	] );
-	$base = plugin_dir_url( __FILE__ ) . 'dist';
+	$base    = plugin_dir_url( __FILE__ ) . 'dist';
 	$version = $data['version'];
-	wp_register_script( 'taro-iframe-block-editor', $base .'/js/block.js', [ 'wp-i18n', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-block-editor', 'wp-server-side-render' ], $version, true );
+	wp_register_script( 'taro-iframe-block-editor', $base . '/js/block.js', [ 'wp-i18n', 'wp-data', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-block-editor', 'wp-server-side-render' ], $version, true );
 	wp_register_style( 'taro-iframe-block-editor', $base . '/css/editor.css', [], $version );
 	wp_register_style( 'taro-iframe-block', $base . '/css/style.css', [], $version );
 	register_block_type( 'taro/iframe-block', [
@@ -55,15 +55,15 @@ function taro_iframe_enqueue_theme() {
  */
 function taro_iframe_option() {
 	return [
-		'src' => [
+		'src'        => [
 			'type'    => 'string',
 			'default' => '',
 		],
-		'width' => [
+		'width'      => [
 			'type'    => 'string',
 			'default' => '',
 		],
-		'height' => [
+		'height'     => [
 			'type'    => 'string',
 			'default' => '',
 		],
@@ -71,7 +71,7 @@ function taro_iframe_option() {
 			'type'    => 'boolean',
 			'default' => true,
 		],
-		'loading' => [
+		'loading'    => [
 			'type'    => 'string',
 			'default' => 'lazy',
 		],
@@ -79,11 +79,11 @@ function taro_iframe_option() {
 			'type'    => 'boolean',
 			'default' => false,
 		],
-		'other' => [
+		'other'      => [
 			'type'    => 'string',
 			'default' => '',
 		],
-		'align' => [
+		'align'      => [
 			'type'    => 'string',
 			'default' => '',
 		],
@@ -94,7 +94,7 @@ function taro_iframe_option() {
  * Render dynamic block.
  *
  * @param array  $attributes Options.
- * @param string $content   Body.
+ * @param string $content    Body.
  *
  * @return string
  */
@@ -123,9 +123,9 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 		if ( ! empty( $attributes['other'] ) ) {
 			$html_attributes[] = $attributes['other'];
 		}
-		$html_attributes[] = 'frameborder="0"';
+		$html_attributes = implode( ' ', $html_attributes );
 		// Create html
-		$iframe = sprintf( '<iframe %s />', implode( ' ', $html_attributes ) );
+		$iframe        = sprintf( '<iframe %s></iframe>', $html_attributes );
 		$wrapper_class = [ 'taro-iframe-block-wrapper' ];
 		if ( ! empty( $attributes['className'] ) ) {
 			$wrapper_class[] = $attributes['className'];
@@ -145,11 +145,11 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 			if ( is_numeric( $attributes['width'] ) && is_numeric( $attributes['height'] ) && $attributes['width'] && $attributes['height'] ) {
 				$ratio = $attributes['height'] / $attributes['width'] * 100;
 			}
-			$block = sprintf( '<div class="taro-iframe-responsive-spacer"%s></div>', ( 0 < $ratio ? sprintf( ' style="padding-top: %f%%;"', $ratio ) :  '' ) );
+			$block = sprintf( '<div class="taro-iframe-responsive-spacer"%s></div>', ( 0 < $ratio ? sprintf( ' style="padding-top: %f%%;"', $ratio ) : '' ) );
 			$block = apply_filters( 'taro_iframe_block_spacer_html', $block, $attributes, $ratio );
 		}
 		$wrapper_class = apply_filters( 'taro_iframe_block_wrapper_class', $wrapper_class, $attributes );
-		$html = sprintf(
+		return sprintf(
 			'<div class="%1$s">%2$s %3$s</div>',
 			esc_attr( implode( ' ', $wrapper_class ) ),
 			wp_kses( $block, [ 'div' => [ 'class' => [], 'style' => [] ] ] ),
@@ -167,7 +167,6 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 				],
 			] )
 		);
-		return $html;
 	}
 }
 

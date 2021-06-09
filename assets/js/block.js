@@ -2,7 +2,7 @@
  * iframe block
  *
  * @handle taro-iframe-block-editor
- * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-compose
+ * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-compose, wp-data
  */
 
 /* global TaroIframeBlockEditor:false */
@@ -13,7 +13,14 @@ const { InspectorControls } = wp.blockEditor;
 const { PanelBody, ToggleControl, TextControl, TextareaControl, Button } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
 const { withState } = wp.compose;
+const { dispatch } = wp.data;
 
+/**
+ * Line style.
+ *
+ * @param {string} color Color name in hex.
+ * @returns {{strokeWidth: string, fill: string, stroke: string, strokeMiterlimit: number}}
+ */
 const lineStyle = ( color = '#fff' ) => {
 	return {
 		fill: color,
@@ -22,6 +29,75 @@ const lineStyle = ( color = '#fff' ) => {
 		strokeWidth: '10px',
 	};
 };
+
+/**
+ * Convert HTMl iframe to options.
+ *
+ * @param {string} string iframe html to convert.
+ * @returns {{}|boolean}
+ */
+const convertHtmlToOptions = ( string ) => {
+	if ( ! string.match( /<iframe ([^>]+)\/?>/i ) ) {
+		// error.
+		dispatch( 'core/notices' ).createNotice( 'error', __( 'Sorry, but failed to parse iframe tag.', 'taro-iframe-block' ), {
+			type: 'snackbar',
+		} ).then( res => {
+			setTimeout( () => {
+				dispatch( 'core/notices' ).removeNotice( res.notice.id );
+			}, 3000 );
+		} );
+		return false;
+	}
+	const newAttr = {};
+	const other = [];
+	let updated = false;
+	RegExp.$1.split( ' ' ).forEach( ( part ) => {
+		part = part.trim();
+		if ( 'allowfullscreen' === part ) {
+			newAttr.fullscreen = true;
+			updated = true;
+			return true;
+		} else if ( ! part.match( /^([^=]+)=['"]([^'"]+)['"]$/i ) ) {
+			return true;
+		} else if ( TaroIframeBlockEditor.hasOwnProperty( RegExp.$1 ) ) {
+			newAttr[ RegExp.$1 ] = RegExp.$2;
+		} else {
+			other.push( part );
+		}
+		updated = true;
+	} );
+	if ( other.length ) {
+		newAttr.other = other.join( ' ' );
+	}
+	// If changed, update.attributes.
+	if ( updated ) {
+		return newAttr;
+	}
+	return false;
+};
+
+const IframeInserter = withState( {
+	html: ''
+} )( ( { html, setState, onConvert } ) => {
+	return (
+		<>
+			<TextareaControl label={ __( 'iframe tag', 'taro-iframe-block' ) } value={ html }
+				onChange={ ( newHtml ) => setState( { html: newHtml } ) }
+				help={ __( 'Paste html tag here and convert into options.',  'taro-iframe-block' ) }
+				placeholder={ 'e.g. <iframe src="https://example.com" width="640" height="480" />' } rows={ 4 } />
+			<Button onClick={ () => {
+				if ( onConvert ) {
+					const newAttributes = convertHtmlToOptions( html );
+					if ( newAttributes ) {
+						onConvert( newAttributes );
+					}
+				}
+			} } isSecondary>
+				{ __( 'Convert', 'taro-iframe-block' ) }
+			</Button>
+		</>
+	);
+} );
 
 registerBlockType( 'taro/iframe-block', {
 
@@ -62,61 +138,15 @@ registerBlockType( 'taro/iframe-block', {
 
 	description: __( 'Add responsive iframe block which keep original aspect ratio.', 'taro-iframe-block' ),
 
-	edit: withState( {
-		html: '',
-	} )( ( { attributes, setAttributes, setState, html } ) => {
+	edit( { attributes, setAttributes } ) {
 
-		const convertHtmlToOptions = ( string ) => {
-			if ( ! string.match( /<iframe ([^>]+)\/?>/i ) ) {
-				// error.
-				console.log( 'error' );
-				return;
-			}
-			const newAttr = {};
-			const other = [];
-			let updated = false;
-			RegExp.$1.split( ' ' ).forEach( ( part ) => {
-				part = part.trim();
-				if ( 'allowfullscreen' === part ) {
-					newAttr.fullscreen = true;
-					updated = true;
-					return true;
-				} else if ( ! part.match( /^([^=]+)=['"]([^'"]+)['"]$/i ) ) {
-					return true;
-				} else if ( attributes.hasOwnProperty( RegExp.$1 ) ) {
-					newAttr[ RegExp.$1 ] = RegExp.$2;
-				} else {
-					other.push( part );
-				}
-				updated = true;
-			} );
-			if ( other.length ) {
-				newAttr.other = other.join( ' ' );
-			}
-			// If changed, update.attributes.
-			if ( updated ) {
-				setState( { html: '' }, setAttributes( newAttr ) );
-			}
-		};
 
-		const IframeInserter = () => {
-			return (
-				<>
-					<TextareaControl label={ __( 'iframe tag', 'taro-iframe-block' ) } value={ html }
-						onChange={ ( newHtml ) => setState( { html: newHtml } ) }
-						help={ __( 'Paste html tag here and convert into options.',  'taro-iframe-block' ) }
-						placeholder={ 'e.g. <iframe src="https://example.com" width="640" height="480" />' } rows={ 4 } />
-					<Button onClick={ () => convertHtmlToOptions( html ) } isSecondary>
-						{ __( 'Convert', 'taro-iframe-block' ) }
-					</Button>
-				</>
-			);
-		};
 		let responsiveHelp;
 		if ( attributes.responsive ) {
 			if ( /^\d+$/.test( attributes.width ) && /^\d+$/.test( attributes.height ) && 0 < attributes.width * attributes.height ) {
-				let ratio = attributes.height / attributes.width * 100;
-				responsiveHelp = sprintf( __( 'Current aspect ratio:  %s', 'taro-iframe-bock' ), Math.floor( ratio ) + '%' );
+				const ratio = attributes.height / attributes.width * 100;
+				// translators: %s is aspect ratio.
+				responsiveHelp = sprintf( __( 'Current aspect ratio: %s', 'taro-iframe-bock' ), Math.floor( ratio ) + '%' );
 			} else {
 				responsiveHelp = __( 'Failed to convert aspect ratio. It will be 16:9(56.25%, default)', 'taro-iframe-bock' );
 			}
@@ -139,19 +169,19 @@ registerBlockType( 'taro/iframe-block', {
 							value={ attributes.other } onChange={ other => setAttributes( { other } ) } />
 					</PanelBody>
 					<PanelBody defaultOpen={ false } title={ __( 'Converter', 'taro-iframe-block' ) }>
-						<IframeInserter />
+						<IframeInserter onConvert={ ( newAttr ) => setAttributes( newAttr ) } />
 					</PanelBody>
 				</InspectorControls>
 				{ ( ! attributes.src.length ) ? (
 					<div className="taro-iframe-block-editor">
-						<IframeInserter />
+						<IframeInserter onConvert={ ( newAttr ) => setAttributes( newAttr ) } />
 					</div>
 				) : (
 					<ServerSideRender block="taro/iframe-block" attributes={ attributes } />
 				) }
 			</>
 		);
-	} ),
+	},
 
 	save() {
 		return null;
