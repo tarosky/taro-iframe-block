@@ -48,6 +48,10 @@ Create a new [issue](https://github.com/tarosky/taro-iframe-block/issues) or sen
 
 ## Changelog
 
+### 1.0.2
+
+* Fix JS translation.
+
 ### 1.0.0
 
 * First release.

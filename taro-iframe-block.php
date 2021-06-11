@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/taro-iframe-block/
 Description: Add iframe block for block editor.
 Author: Tarosky INC.
 Version: nightly
-Author URI: https://hametuha.co.jp/
+Author URI: https://tarosky.co.jp/
 License: GPL3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Text Domain: taro-iframe-block
@@ -37,6 +37,7 @@ function taro_iframe_block_assets() {
  */
 function taro_iframe_enqueue_editor() {
 	wp_enqueue_script( 'taro-iframe-block-editor' );
+	wp_set_script_translations( 'taro-iframe-block-editor', 'taro-iframe-block' );
 	wp_localize_script( 'taro-iframe-block-editor', 'TaroIframeBlockEditor', taro_iframe_option() );
 	wp_enqueue_style( 'taro-iframe-block-editor' );
 }
