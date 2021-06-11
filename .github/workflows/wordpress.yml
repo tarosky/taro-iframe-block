@@ -61,8 +61,10 @@ jobs:
       - name: Check JS & CSS syntax
         run: npm run lint
 
-  tag:
-    name: New release
+  release:
+    name: Deploy WordPress.org
+    needs: test
+    if: contains(github.ref, 'tags/')
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
