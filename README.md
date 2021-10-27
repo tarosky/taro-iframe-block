@@ -48,6 +48,10 @@ Create a new [issue](https://github.com/tarosky/taro-iframe-block/issues) or sen
 
 ## Changelog
 
+### 1.0.3
+
+* Add quick hack for JS translation in GlotPress([detail](https://wordpress.slack.com/archives/C02RP50LK/p1635254887019500))
+
 ### 1.0.2
 
 * Fix JS translation.

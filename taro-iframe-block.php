@@ -37,7 +37,16 @@ function taro_iframe_block_assets() {
  */
 function taro_iframe_enqueue_editor() {
 	wp_enqueue_script( 'taro-iframe-block-editor' );
+	// wp_set_script_translations needs quick hack.
+	add_filter( 'load_script_textdomain_relative_path', function ( $relative, $src ) {
+		$basename = basename( __DIR__ ) . '/dist/js/block.js';
+		if ( false !== strpos( $src, $basename ) ) {
+			$relative = 'assets/js/block.js';
+		}
+		return $relative;
+	}, 10, 2 );
 	wp_set_script_translations( 'taro-iframe-block-editor', 'taro-iframe-block' );
+	// see https://wordpress.slack.com/archives/C02RP50LK/p1635254887019500
 	wp_localize_script( 'taro-iframe-block-editor', 'TaroIframeBlockEditor', taro_iframe_option() );
 	wp_enqueue_style( 'taro-iframe-block-editor' );
 }
