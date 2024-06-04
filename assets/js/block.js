@@ -2,17 +2,17 @@
  * iframe block
  *
  * @handle taro-iframe-block-editor
- * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-compose, wp-data
+ * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-data, wp-element
  */
 
 /* global TaroIframeBlockEditor:false */
 
 const { registerBlockType } = wp.blocks;
+const { useState } = wp.element;
 const { __, sprintf } = wp.i18n;
 const { InspectorControls } = wp.blockEditor;
 const { PanelBody, ToggleControl, TextControl, TextareaControl, Button } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
-const { withState } = wp.compose;
 const { dispatch } = wp.data;
 
 /**
@@ -41,7 +41,7 @@ const convertHtmlToOptions = ( string ) => {
 		// error.
 		dispatch( 'core/notices' ).createNotice( 'error', __( 'Sorry, but failed to parse iframe tag.', 'taro-iframe-block' ), {
 			type: 'snackbar',
-		} ).then( res => {
+		} ).then( ( res ) => {
 			setTimeout( () => {
 				dispatch( 'core/notices' ).removeNotice( res.notice.id );
 			}, 3000 );
@@ -76,14 +76,13 @@ const convertHtmlToOptions = ( string ) => {
 	return false;
 };
 
-const IframeInserter = withState( {
-	html: ''
-} )( ( { html, setState, onConvert } ) => {
+const IframeInserter = ( { onConvert } ) => {
+	const [ html, setHtmlState ] = useState( '' );
 	return (
 		<>
 			<TextareaControl label={ __( 'iframe tag', 'taro-iframe-block' ) } value={ html }
-				onChange={ ( newHtml ) => setState( { html: newHtml } ) }
-				help={ __( 'Paste html tag here and convert into options.',  'taro-iframe-block' ) }
+				onChange={ ( newHtml ) => setHtmlState( newHtml ) }
+				help={ __( 'Paste html tag here and convert into options.', 'taro-iframe-block' ) }
 				placeholder={ 'e.g. <iframe src="https://example.com" width="640" height="480" />' } rows={ 4 } />
 			<Button onClick={ () => {
 				if ( onConvert ) {
@@ -97,7 +96,7 @@ const IframeInserter = withState( {
 			</Button>
 		</>
 	);
-} );
+};
 
 registerBlockType( 'taro/iframe-block', {
 
@@ -129,7 +128,7 @@ registerBlockType( 'taro/iframe-block', {
 	example: {
 		src: 'https://wordpress.org',
 		width: 320,
-		height: 180
+		height: 180,
 	},
 
 	keywords: [ 'iframe', __( 'Embed', 'taro-iframe-block' ) ],
@@ -139,8 +138,6 @@ registerBlockType( 'taro/iframe-block', {
 	description: __( 'Add responsive iframe block which keep original aspect ratio.', 'taro-iframe-block' ),
 
 	edit( { attributes, setAttributes } ) {
-
-
 		let responsiveHelp;
 		if ( attributes.responsive ) {
 			if ( /^\d+$/.test( attributes.width ) && /^\d+$/.test( attributes.height ) && 0 < attributes.width * attributes.height ) {
@@ -157,16 +154,16 @@ registerBlockType( 'taro/iframe-block', {
 			<>
 				<InspectorControls>
 					<PanelBody defaultOpen={ true } title={ __( 'Display Setting', 'taro-iframe-block' ) } >
-						<TextControl type="url" label={ __( 'SRC attribute', 'taro-iframe-block' ) } value={ attributes.src } onChange={ src => setAttributes( { src } ) } />
-						<TextControl label={ __( 'Width', 'taro-iframe-block' ) } value={ attributes.width } onChange={ width => setAttributes( { width } ) } />
-						<TextControl label={ __( 'Height', 'taro-iframe-block' ) } value={ attributes.height } onChange={ height => setAttributes( { height } ) } />
-						<ToggleControl checked={ attributes.responsive } label={ __( 'Responsive', 'taro-iframe-block' ) } onChange={ responsive => setAttributes( { responsive } ) }
+						<TextControl type="url" label={ __( 'SRC attribute', 'taro-iframe-block' ) } value={ attributes.src } onChange={ ( src ) => setAttributes( { src } ) } />
+						<TextControl label={ __( 'Width', 'taro-iframe-block' ) } value={ attributes.width } onChange={ ( width ) => setAttributes( { width } ) } />
+						<TextControl label={ __( 'Height', 'taro-iframe-block' ) } value={ attributes.height } onChange={ ( height ) => setAttributes( { height } ) } />
+						<ToggleControl checked={ attributes.responsive } label={ __( 'Responsive', 'taro-iframe-block' ) } onChange={ ( responsive ) => setAttributes( { responsive } ) }
 							help={ responsiveHelp } />
-						<ToggleControl checked={ attributes.fullscreen } label={ __( 'Allow Fullscreen', 'taro-iframe-block' ) } onChange={ fullscreen => setAttributes( { fullscreen } ) } />
+						<ToggleControl checked={ attributes.fullscreen } label={ __( 'Allow Fullscreen', 'taro-iframe-block' ) } onChange={ ( fullscreen ) => setAttributes( { fullscreen } ) } />
 						<TextControl label={ __( 'Other Attributes', 'taro-iframe-block' ) }
 							placeholder={ 'e.g. id="frame" name="my-map"' }
 							help={ __( 'Add other attribute here.', 'taro-iframe-block' ) }
-							value={ attributes.other } onChange={ other => setAttributes( { other } ) } />
+							value={ attributes.other } onChange={ ( other ) => setAttributes( { other } ) } />
 					</PanelBody>
 					<PanelBody defaultOpen={ false } title={ __( 'Converter', 'taro-iframe-block' ) }>
 						<IframeInserter onConvert={ ( newAttr ) => setAttributes( newAttr ) } />
