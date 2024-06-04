@@ -2,17 +2,17 @@
  * iframe block
  *
  * @handle taro-iframe-block-editor
- * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-compose, wp-data
+ * @deps wp-i18n, wp-components, wp-blocks, wp-block-editor, wp-server-side-render, wp-data, wp-element
  */
 
 /* global TaroIframeBlockEditor:false */
 
 const { registerBlockType } = wp.blocks;
+const { useState } = wp.element;
 const { __, sprintf } = wp.i18n;
 const { InspectorControls } = wp.blockEditor;
 const { PanelBody, ToggleControl, TextControl, TextareaControl, Button } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
-const { withState } = wp.compose;
 const { dispatch } = wp.data;
 
 /**
@@ -76,13 +76,12 @@ const convertHtmlToOptions = ( string ) => {
 	return false;
 };
 
-const IframeInserter = withState( {
-	html: ''
-} )( ( { html, setState, onConvert } ) => {
+const IframeInserter = ( { onConvert } ) => {
+	const [ html, setHtmlState ] = useState( '' );
 	return (
 		<>
 			<TextareaControl label={ __( 'iframe tag', 'taro-iframe-block' ) } value={ html }
-				onChange={ ( newHtml ) => setState( { html: newHtml } ) }
+				onChange={ ( newHtml ) => setHtmlState( { html: newHtml } ) }
 				help={ __( 'Paste html tag here and convert into options.',  'taro-iframe-block' ) }
 				placeholder={ 'e.g. <iframe src="https://example.com" width="640" height="480" />' } rows={ 4 } />
 			<Button onClick={ () => {
@@ -97,7 +96,7 @@ const IframeInserter = withState( {
 			</Button>
 		</>
 	);
-} );
+};
 
 registerBlockType( 'taro/iframe-block', {
 

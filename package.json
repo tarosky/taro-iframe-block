@@ -43,5 +43,11 @@
 		"webpack": "^5.3",
 		"webpack-stream": "^6.1"
 	},
-	"dependencies": {}
+	"dependencies": {},
+	"engines": {
+		"node": ">=14"
+	},
+	"volta": {
+		"node": "14.21.3"
+	}
 }

@@ -2,9 +2,9 @@
 
 Tags: gutenberg, block editor, iframe  
 Contributors: tarosky, Takahashi_Fumiki  
-Tested up to: 5.7  
-Requires at least: 5.4  
-Requires PHP: 5.6  
+Tested up to: 6.5  
+Requires at least: 5.9  
+Requires PHP: 7.2  
 Stable Tag: nightly  
 License: GPLv3 or later  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -47,6 +47,13 @@ Please create new ticket on support forum.
 Create a new [issue](https://github.com/tarosky/taro-iframe-block/issues) or send [pull requests](https://github.com/tarosky/taro-iframe-block/pulls).
 
 ## Changelog
+
+### 1.1.0
+
+* Drop support for PHP 5.6 and minimum PHP version is 7.2.
+* Minimum WordPress version is now 5.9.
+* Update JS for the latest block editor.
+
 
 ### 1.0.3
 
