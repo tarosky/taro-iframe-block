@@ -81,7 +81,7 @@ const IframeInserter = ( { onConvert } ) => {
 	return (
 		<>
 			<TextareaControl label={ __( 'iframe tag', 'taro-iframe-block' ) } value={ html }
-				onChange={ ( newHtml ) => setHtmlState( { html: newHtml } ) }
+				onChange={ ( newHtml ) => setHtmlState( newHtml ) }
 				help={ __( 'Paste html tag here and convert into options.',  'taro-iframe-block' ) }
 				placeholder={ 'e.g. <iframe src="https://example.com" width="640" height="480" />' } rows={ 4 } />
 			<Button onClick={ () => {

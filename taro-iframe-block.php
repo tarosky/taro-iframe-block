@@ -174,6 +174,7 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 					'allowfullscreen' => [],
 					'allow'           => [],
 					'frameborder'     => [],
+					'sandbox'         => [],
 				],
 			] )
 		);
