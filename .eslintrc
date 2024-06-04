@@ -8,11 +8,7 @@
 		"wp": false,
 		"jQuery": false,
 		"angular": false,
-		"Hametuha": true,
-		"wpApiSettings": false,
-		"ga": false,
-		"Hashboard": true,
-		"Vue": false
+		"wpApiSettings": false
 	},
 	"extends": [
 		"plugin:@wordpress/eslint-plugin/recommended-with-formatting"
