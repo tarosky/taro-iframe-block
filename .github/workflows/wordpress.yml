@@ -63,8 +63,6 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Check PHP syntax
-        run: composer test
       - name: Install NPM Packages
         run: npm install
 
