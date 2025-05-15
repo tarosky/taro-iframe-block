@@ -2,7 +2,7 @@
 
 Tags: gutenberg, block editor, iframe  
 Contributors: tarosky, Takahashi_Fumiki  
-Tested up to: 6.5  
+Tested up to: 6.8  
 Requires at least: 5.9  
 Requires PHP: 7.2  
 Stable Tag: nightly  
@@ -14,7 +14,7 @@ Add iframe block for your editor. Responsive and keeping aspect ratio.
 ## Description
 
 Add iframe block for block editor.
-WordPress editor sometimes clean up <code>iframe</code> tag if the user is an contributor(single site) or an editor(multi site) who has no capability [unfiltered_html](https://wordpress.org/support/article/roles-and-capabilities/#unfiltered_html).
+WordPress editor sometimes cleans up <code>iframe</code> tag if the user is a contributor(single site) or an editor(multi site) who has no capability [unfiltered_html](https://wordpress.org/support/article/roles-and-capabilities/#unfiltered_html).
 
 This plugin simply add 1 custom block **iframe block**. That's all and no config.
 
@@ -23,7 +23,7 @@ This plugin simply add 1 custom block **iframe block**. That's all and no config
 - `iframe` tag not escaped.
 - Responsive supported.
 - Keep aspect ratio. Default is <code>16:9</code>.
-- Keep `iframe` unesacaped even in multisite. If you have multiple  writers in your site, this might help without any roles-and-capabilitie knowledge.
+- Keep `iframe` unescaped even in multisite. If you have multiple writers in your site, this might help without any roles-and-capabilities knowledge.
 - Align full and align wide supported.
 
 ## Installation
