@@ -52,7 +52,7 @@ const convertHtmlToOptions = ( string ) => {
 	const newAttr = {};
 	const other = [];
 	let updated = false;
-	iframeMatch[ 1 ].match( /[\w-]+="[^"]*"/g ).forEach( ( part ) => {
+	iframeMatch[ 1 ].match( /[\w-]+=(?:"[^"]*"|'[^']*')|[\w-]+/g ).forEach( ( part ) => {
 		part = part.trim();
 		if ( 'allowfullscreen' === part ) {
 			newAttr.fullscreen = true;
