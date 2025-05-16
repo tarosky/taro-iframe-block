@@ -177,6 +177,12 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 					'allow'           => [],
 					'frameborder'     => [],
 					'sandbox'         => [],
+					'referrerpolicy'  => [],
+					'title'           => [],
+					'style'           => [],
+					'name'            => [],
+					'tabindex'        => [],
+					'csp'             => [],
 				],
 			] )
 		);
