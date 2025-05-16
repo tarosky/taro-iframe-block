@@ -180,6 +180,9 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 					'referrerpolicy'  => [],
 					'title'           => [],
 					'style'           => [],
+					'name'            => [],
+					'tabindex'        => [],
+					'csp'             => [],
 				],
 			] )
 		);
