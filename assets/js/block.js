@@ -37,7 +37,8 @@ const lineStyle = ( color = '#fff' ) => {
  * @returns {{}|boolean}
  */
 const convertHtmlToOptions = ( string ) => {
-	if ( ! string.match( /<iframe ([^>]+)\/?>/i ) ) {
+	const iframeMatch = string.match( /<iframe ([^>]+)\/?>/i );
+	if ( ! iframeMatch ) {
 		// error.
 		dispatch( 'core/notices' ).createNotice( 'error', __( 'Sorry, but failed to parse iframe tag.', 'taro-iframe-block' ), {
 			type: 'snackbar',
@@ -51,16 +52,19 @@ const convertHtmlToOptions = ( string ) => {
 	const newAttr = {};
 	const other = [];
 	let updated = false;
-	RegExp.$1.split( ' ' ).forEach( ( part ) => {
+	iframeMatch[ 1 ].match( /[\w-]+="[^"]*"/g ).forEach( ( part ) => {
 		part = part.trim();
 		if ( 'allowfullscreen' === part ) {
 			newAttr.fullscreen = true;
 			updated = true;
 			return true;
-		} else if ( ! part.match( /^([^=]+)=['"]([^'"]+)['"]$/i ) ) {
+		}
+		const match = part.match( /^([^=]+)=['"]([^'"]+)['"]$/i );
+		if ( ! match ) {
 			return true;
-		} else if ( TaroIframeBlockEditor.hasOwnProperty( RegExp.$1 ) ) {
-			newAttr[ RegExp.$1 ] = RegExp.$2;
+		}
+		if ( TaroIframeBlockEditor.hasOwnProperty( match[ 1 ] ) ) {
+			newAttr[ match[ 1 ] ] = match[ 2 ];
 		} else {
 			other.push( part );
 		}
