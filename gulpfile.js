@@ -1,6 +1,7 @@
 const gulp = require( 'gulp' );
 const fs = require( 'fs' );
 const $ = require( 'gulp-load-plugins' )();
+const sass = require( 'gulp-sass' )( require( 'sass' ) );
 const webpack = require( 'webpack-stream' );
 const webpackBundle = require( 'webpack' );
 const named = require( 'vinyl-named' );
@@ -14,9 +15,8 @@ gulp.task( 'sass', function () {
 		.pipe( $.plumber( {
 			errorHandler: $.notify.onError( '<%= error.message %>' )
 		} ) )
-		.pipe( $.sassGlob() )
 		.pipe( $.sourcemaps.init() )
-		.pipe( $.sass( {
+		.pipe( sass( {
 			errLogToConsole: true,
 			outputStyle: 'compressed',
 			sourceComments: false,
