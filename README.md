@@ -30,7 +30,7 @@ This plugin simply add 1 custom block **iframe block**. That's all and no config
 
 Click install and activate it.
 
-### From Github
+### From GitHub
 
 See [releases](https://github.com/tarosky/taro-iframe-block/releases).
 
@@ -46,12 +46,15 @@ Create a new [issue](https://github.com/tarosky/taro-iframe-block/issues) or sen
 
 ## Changelog
 
+### 1.1.1
+
+* Allow title fields for iframe tag.
+
 ### 1.1.0
 
 * Drop support for PHP 5.6 and minimum PHP version is 7.2.
 * Minimum WordPress version is now 5.9.
 * Update JS for the latest block editor.
-
 
 ### 1.0.3
 
