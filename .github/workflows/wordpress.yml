@@ -23,7 +23,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Install NPM Packages
         run: npm install
@@ -64,7 +64,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Build Plugin
         run: bash bin/build.sh ${{ github.ref }}
