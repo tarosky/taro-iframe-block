@@ -1,7 +1,7 @@
 # Taro iframe Block
 
 Tags: gutenberg, block editor, iframe  
-Contributors: tarosky, Takahashi_Fumiki  
+Contributors: tarosky, Takahashi_Fumiki, tswallie  
 Tested up to: 6.8  
 Stable Tag: nightly  
 License: GPLv3 or later  
