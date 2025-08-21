@@ -161,6 +161,7 @@ registerBlockType( 'taro/iframe-block', {
 						<TextControl type="url" label={ __( 'SRC attribute', 'taro-iframe-block' ) } value={ attributes.src } onChange={ ( src ) => setAttributes( { src } ) } __next40pxDefaultSize={ true } __nextHasNoMarginBottom={ true } />
 						<TextControl label={ __( 'Width', 'taro-iframe-block' ) } value={ attributes.width } onChange={ ( width ) => setAttributes( { width } ) } __next40pxDefaultSize={ true } __nextHasNoMarginBottom={ true } />
 						<TextControl label={ __( 'Height', 'taro-iframe-block' ) } value={ attributes.height } onChange={ ( height ) => setAttributes( { height } ) } __next40pxDefaultSize={ true } __nextHasNoMarginBottom={ true } />
+						<TextControl label={ __( 'Title', 'taro-iframe-block' ) } value={ attributes.title } onChange={ ( title ) => setAttributes( { title } ) } __next40pxDefaultSize={ true } __nextHasNoMarginBottom={ true } />
 						<ToggleControl checked={ attributes.responsive } label={ __( 'Responsive', 'taro-iframe-block' ) } onChange={ ( responsive ) => setAttributes( { responsive } ) }
 							help={ responsiveHelp } __nextHasNoMarginBottom={ true } />
 						<ToggleControl checked={ attributes.fullscreen } label={ __( 'Allow Fullscreen', 'taro-iframe-block' ) } onChange={ ( fullscreen ) => setAttributes( { fullscreen } ) } __nextHasNoMarginBottom={ true } />
