@@ -79,6 +79,10 @@ function taro_iframe_option() {
 			'type'    => 'string',
 			'default' => '',
 		],
+		'title'      => [
+			'type'    => 'string',
+			'default' => '',
+		],
 		'responsive' => [
 			'type'    => 'boolean',
 			'default' => true,
@@ -119,74 +123,73 @@ function taro_iframe_callback( $attributes = [], $content = '' ) {
 	$attributes = wp_parse_args( $attributes, $default );
 	if ( ! $attributes['src'] ) {
 		return '';
-	} else {
-		// Build attributes.
-		$html_attributes = [];
-		foreach ( [ 'src', 'width', 'height', 'loading' ] as $key ) {
-			if ( ! empty( $attributes[ $key ] ) ) {
-				$html_attributes[] = sprintf( '%s="%s"', $key, esc_attr( $attributes[ $key ] ) );
-			}
-		}
-		// Create iframe.
-		if ( $attributes['fullscreen'] ) {
-			$html_attributes[] = 'allowfullscreen';
-		}
-		// Add other props.
-		if ( ! empty( $attributes['other'] ) ) {
-			$html_attributes[] = $attributes['other'];
-		}
-		$html_attributes = implode( ' ', $html_attributes );
-		// Create html
-		$iframe        = sprintf( '<iframe %s></iframe>', $html_attributes );
-		$wrapper_class = [ 'taro-iframe-block-wrapper' ];
-		if ( ! empty( $attributes['className'] ) ) {
-			$wrapper_class[] = $attributes['className'];
-		}
-		switch ( $attributes['align'] ) {
-			case 'full':
-			case 'wide':
-			case 'center':
-				$wrapper_class[] = 'align' . $attributes['align'];
-				break;
-		}
-		$block = '';
-		if ( $attributes['responsive'] ) {
-			$wrapper_class[] = 'taro-iframe-responsive';
-			// Calculate width and height;
-			$ratio = 0;
-			if ( is_numeric( $attributes['width'] ) && is_numeric( $attributes['height'] ) && $attributes['width'] && $attributes['height'] ) {
-				$ratio = $attributes['height'] / $attributes['width'] * 100;
-			}
-			$block = sprintf( '<div class="taro-iframe-responsive-spacer"%s></div>', ( 0 < $ratio ? sprintf( ' style="padding-top: %f%%;"', $ratio ) : '' ) );
-			$block = apply_filters( 'taro_iframe_block_spacer_html', $block, $attributes, $ratio );
-		}
-		$wrapper_class = apply_filters( 'taro_iframe_block_wrapper_class', $wrapper_class, $attributes );
-		return sprintf(
-			'<div class="%1$s">%2$s %3$s</div>',
-			esc_attr( implode( ' ', $wrapper_class ) ),
-			wp_kses( $block, [ 'div' => [ 'class' => [], 'style' => [] ] ] ),
-			wp_kses( $iframe, [
-				'iframe' => [
-					'src'             => [],
-					'width'           => [],
-					'height'          => [],
-					'id'              => [],
-					'class'           => [],
-					'loading'         => [],
-					'allowfullscreen' => [],
-					'allow'           => [],
-					'frameborder'     => [],
-					'sandbox'         => [],
-					'referrerpolicy'  => [],
-					'title'           => [],
-					'style'           => [],
-					'name'            => [],
-					'tabindex'        => [],
-					'csp'             => [],
-				],
-			] )
-		);
 	}
+	// Build attributes.
+	$html_attributes = [];
+	foreach ( [ 'src', 'width', 'height', 'title', 'loading' ] as $key ) {
+		if ( ! empty( $attributes[ $key ] ) ) {
+			$html_attributes[] = sprintf( '%s="%s"', $key, esc_attr( $attributes[ $key ] ) );
+		}
+	}
+	// Create iframe.
+	if ( $attributes['fullscreen'] ) {
+		$html_attributes[] = 'allowfullscreen';
+	}
+	// Add other props.
+	if ( ! empty( $attributes['other'] ) ) {
+		$html_attributes[] = $attributes['other'];
+	}
+	$html_attributes = implode( ' ', $html_attributes );
+	// Create html
+	$iframe        = sprintf( '<iframe %s></iframe>', $html_attributes );
+	$wrapper_class = [ 'taro-iframe-block-wrapper' ];
+	if ( ! empty( $attributes['className'] ) ) {
+		$wrapper_class[] = $attributes['className'];
+	}
+	switch ( $attributes['align'] ) {
+		case 'full':
+		case 'wide':
+		case 'center':
+			$wrapper_class[] = 'align' . $attributes['align'];
+			break;
+	}
+	$block = '';
+	if ( $attributes['responsive'] ) {
+		$wrapper_class[] = 'taro-iframe-responsive';
+		// Calculate width and height;
+		$ratio = 0;
+		if ( is_numeric( $attributes['width'] ) && is_numeric( $attributes['height'] ) && $attributes['width'] && $attributes['height'] ) {
+			$ratio = $attributes['height'] / $attributes['width'] * 100;
+		}
+		$block = sprintf( '<div class="taro-iframe-responsive-spacer"%s></div>', ( 0 < $ratio ? sprintf( ' style="padding-top: %f%%;"', $ratio ) : '' ) );
+		$block = apply_filters( 'taro_iframe_block_spacer_html', $block, $attributes, $ratio );
+	}
+	$wrapper_class = apply_filters( 'taro_iframe_block_wrapper_class', $wrapper_class, $attributes );
+	return sprintf(
+		'<div class="%1$s">%2$s %3$s</div>',
+		esc_attr( implode( ' ', $wrapper_class ) ),
+		wp_kses( $block, [ 'div' => [ 'class' => [], 'style' => [] ] ] ),
+		wp_kses( $iframe, [
+			'iframe' => [
+				'src'             => [],
+				'width'           => [],
+				'height'          => [],
+				'id'              => [],
+				'class'           => [],
+				'loading'         => [],
+				'allowfullscreen' => [],
+				'allow'           => [],
+				'frameborder'     => [],
+				'sandbox'         => [],
+				'referrerpolicy'  => [],
+				'title'           => [],
+				'style'           => [],
+				'name'            => [],
+				'tabindex'        => [],
+				'csp'             => [],
+			],
+		] )
+	);
 }
 
 // Register hooks.
