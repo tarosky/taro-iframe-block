@@ -1,0 +1,44 @@
+[
+	{
+		"handle": "taro-iframe-block-editor",
+		"path": "dist/js/block.js",
+		"ext": "js",
+		"hash": "3ad61c422adefe3ccd4b4c6d9a84865c",
+		"version": "0.0.0",
+		"deps": [
+			"wp-i18n",
+			"wp-components",
+			"wp-blocks",
+			"wp-block-editor",
+			"wp-server-side-render",
+			"wp-data",
+			"wp-element",
+			"react-jsx-runtime"
+		],
+		"footer": true,
+		"media": "all",
+		"strategy": ""
+	},
+	{
+		"handle": "style",
+		"path": "dist/css/style.css",
+		"ext": "css",
+		"hash": "440673cecb8287a57c62e7de73cbf0f9",
+		"version": "0.0.0",
+		"deps": [],
+		"footer": true,
+		"media": "all",
+		"strategy": ""
+	},
+	{
+		"handle": "editor",
+		"path": "dist/css/editor.css",
+		"ext": "css",
+		"hash": "bc821ec57f036ff37c3ba225ed912142",
+		"version": "0.0.0",
+		"deps": [],
+		"footer": true,
+		"media": "all",
+		"strategy": ""
+	}
+]
