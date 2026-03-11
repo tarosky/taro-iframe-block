@@ -21,9 +21,9 @@ jobs:
       - uses: actions/checkout@main
 
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version-file: '.node-version'
 
       - name: Install NPM Packages
         run: npm install
@@ -62,9 +62,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version-file: '.node-version'
 
       - name: Build Plugin
         run: bash bin/build.sh ${{ github.ref }}
