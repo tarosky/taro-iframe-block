@@ -35,15 +35,13 @@
 		"@wordpress/env": "^9.0.0",
 		"@wordpress/eslint-plugin": "^14.12.0",
 		"@wordpress/scripts": "^30.0.0",
-		"@wordpress/stylelint-config": "^22.0.0",
 		"autoprefixer": "^10.4.16",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
 		"npm-watch": "^0.13.0",
 		"postcss": "^8.4.33",
 		"postcss-cli": "^11.0.0",
-		"sass": "^1.89.0",
-		"stylelint": "^16.0.0"
+		"sass": "^1.89.0"
 	},
 	"engines": {
 		"node": ">=22.0"
