@@ -2,6 +2,7 @@
 	"name": "taro-iframe-block",
 	"main": "gulpfile.js",
 	"scripts": {
+		"prepare": "husky",
 		"start": "wp-env start",
 		"update": "wp-env start --update",
 		"stop": "wp-env stop",
@@ -41,9 +42,16 @@
 		"stylelint-config-wordpress": "^17.0.0",
 		"vinyl-named": "^1.1.0",
 		"webpack": "^5.99.8",
-		"webpack-stream": "^6.1"
+		"webpack-stream": "^6.1",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7"
 	},
 	"engines": {
 		"node": ">=22.0"
+	},
+	"lint-staged": {
+		"*.js": "npm run fix:js",
+		"*.scss": "npm run fix:css",
+		"*.php": "composer lint"
 	}
 }
