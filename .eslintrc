@@ -6,9 +6,7 @@
 	},
 	"globals": {
 		"wp": false,
-		"jQuery": false,
-		"angular": false,
-		"wpApiSettings": false
+		"jQuery": false
 	},
 	"extends": [
 		"plugin:@wordpress/eslint-plugin/recommended-with-formatting"
@@ -28,10 +26,5 @@
 		"object-property-newline": "off",
 		"yoda": "off",
 		"strict": "off"
-	},
-	"settings": {
-		"react": {
-			"version": "16.9.0"
-		}
 	}
 }

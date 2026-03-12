@@ -11,23 +11,51 @@
  * License: GPL3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: taro-iframe-block
- * Domain Path: /languages
  */
 
 defined( 'ABSPATH' ) or die();
 
 /**
- * Register assets
+ * Register assets from wp-dependencies.json.
+ */
+function taro_iframe_block_register_assets() {
+	$json = __DIR__ . '/wp-dependencies.json';
+	if ( ! file_exists( $json ) ) {
+		return;
+	}
+	$dependencies = json_decode( file_get_contents( $json ), true );
+	if ( empty( $dependencies ) ) {
+		return;
+	}
+	$base = trailingslashit( plugin_dir_url( __FILE__ ) );
+	foreach ( $dependencies as $dep ) {
+		if ( empty( $dep['path'] ) ) {
+			continue;
+		}
+		$url = $base . $dep['path'];
+		switch ( $dep['ext'] ) {
+			case 'css':
+				wp_register_style( $dep['handle'], $url, $dep['deps'], $dep['hash'], $dep['media'] );
+				break;
+			case 'js':
+				$footer = [ 'in_footer' => $dep['footer'] ];
+				if ( in_array( $dep['strategy'], [ 'defer', 'async' ], true ) ) {
+					$footer['strategy'] = $dep['strategy'];
+				}
+				wp_register_script( $dep['handle'], $url, $dep['deps'], $dep['hash'], $footer );
+				if ( in_array( 'wp-i18n', $dep['deps'], true ) ) {
+					wp_set_script_translations( $dep['handle'], 'taro-iframe-block' );
+				}
+				break;
+		}
+	}
+}
+
+/**
+ * Register block and assets.
  */
 function taro_iframe_block_assets() {
-	$data    = get_file_data( __FILE__, [
-		'version' => 'Version',
-	] );
-	$base    = plugin_dir_url( __FILE__ ) . 'dist';
-	$version = $data['version'];
-	wp_register_script( 'taro-iframe-block-editor', $base . '/js/block.js', [ 'wp-i18n', 'wp-data', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-block-editor', 'wp-server-side-render' ], $version, true );
-	wp_register_style( 'taro-iframe-block-editor', $base . '/css/editor.css', [], $version );
-	wp_register_style( 'taro-iframe-block', $base . '/css/style.css', [], $version );
+	taro_iframe_block_register_assets();
 	register_block_type( 'taro/iframe-block', [
 		'attributes'      => taro_iframe_option(),
 		'render_callback' => 'taro_iframe_callback',
@@ -39,15 +67,6 @@ function taro_iframe_block_assets() {
  */
 function taro_iframe_enqueue_editor() {
 	wp_enqueue_script( 'taro-iframe-block-editor' );
-	// wp_set_script_translations needs quick hack.
-	add_filter( 'load_script_textdomain_relative_path', function ( $relative, $src ) {
-		$basename = basename( __DIR__ ) . '/dist/js/block.js';
-		if ( false !== strpos( $src, $basename ) ) {
-			$relative = 'assets/js/block.js';
-		}
-		return $relative;
-	}, 10, 2 );
-	wp_set_script_translations( 'taro-iframe-block-editor', 'taro-iframe-block' );
 	// see https://wordpress.slack.com/archives/C02RP50LK/p1635254887019500
 	wp_localize_script( 'taro-iframe-block-editor', 'TaroIframeBlockEditor', taro_iframe_option() );
 	wp_enqueue_style( 'taro-iframe-block-editor' );
