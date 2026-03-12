@@ -3,3 +3,4 @@
 /wordpress
 /dist
 composer.lock
+wp-dependencies.json
